@@ -1,0 +1,247 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FOOD — Order something delicious</title>
+  <style>
+    :root {
+      color-scheme: light;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: #29231f;
+      background: #fff8f1;
+      font-synthesis: none;
+    }
+
+    * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    body { min-height: 100vh; margin: 0; display: grid; place-items: center; padding: 32px 20px; }
+    .shell { width: min(100%, 1000px); min-height: 620px; display: grid; grid-template-columns: 1fr 1fr; overflow: hidden; border: 1px solid #f0e6dc; border-radius: 24px; background: #fff; box-shadow: 0 28px 80px #5b32191a; }
+    .story { position: relative; display: flex; flex-direction: column; justify-content: space-between; overflow: hidden; padding: 42px; color: #fffaf4; background: #a63d22; }
+    .story::before, .story::after { position: absolute; width: 300px; height: 300px; border: 1px solid #ffffff20; border-radius: 50%; content: ""; pointer-events: none; }
+    .story::before { right: -130px; top: 120px; }
+    .story::after { right: -90px; top: 160px; width: 220px; height: 220px; }
+    .story > * { position: relative; z-index: 1; }
+    .brand { display: flex; align-items: center; gap: 11px; font-size: 16px; font-weight: 700; letter-spacing: .02em; }
+    .mark { width: 32px; height: 32px; display: grid; place-items: center; border-radius: 10px; background: #ffd177; color: #78301d; font-size: 18px; }
+    .story-copy { max-width: 370px; padding-bottom: 14px; }
+    .eyebrow { margin: 0 0 16px; color: #ffd177; font-size: 12px; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; }
+    h1 { margin: 0; font-family: Georgia, "Times New Roman", serif; font-size: clamp(38px, 5vw, 57px); font-weight: 400; letter-spacing: -.045em; line-height: 1.04; }
+    .story-copy > p:last-child { max-width: 300px; margin: 20px 0 0; color: #ffe6d7; font-size: 15px; line-height: 1.7; }
+    .food-illustration { position: absolute !important; right: 4px; bottom: 105px; width: min(49%, 240px); height: auto; filter: drop-shadow(0 20px 20px #41190e55); }
+    .quote { margin: 0; padding-top: 20px; border-top: 1px solid #ffffff35; color: #ffe6d7; font-size: 13px; line-height: 1.6; }
+    .quote strong { display: block; margin-top: 10px; color: #fff; font-size: 12px; }
+    .panel { display: flex; align-items: center; justify-content: center; padding: 52px 48px; }
+    .form-wrap { width: 100%; max-width: 370px; }
+    .mobile-brand { display: none; }
+    .form-wrap h2 { margin: 0; font-size: 29px; letter-spacing: -.04em; }
+    .intro { margin: 9px 0 27px; color: #737b74; font-size: 14px; line-height: 1.5; }
+    .switcher { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-bottom: 24px; padding: 4px; border-radius: 11px; background: #f1f3ef; }
+    .switcher button { min-height: 39px; border: 0; border-radius: 8px; background: transparent; color: #687169; font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; }
+    .switcher button[aria-selected="true"] { background: #fff; color: #a63d22; box-shadow: 0 1px 4px #29231f14; }
+    .field { display: block; margin-bottom: 17px; color: #333b35; font-size: 13px; font-weight: 600; }
+    .field input { width: 100%; height: 46px; margin-top: 8px; padding: 0 13px; border: 1px solid #e8ded4; border-radius: 9px; outline: none; background: #fff; color: #29231f; font: inherit; font-size: 14px; }
+    .field input::placeholder { color: #a0a7a0; }
+    .field input:focus { border-color: #c45b35; box-shadow: 0 0 0 3px #c45b3520; }
+    .options { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 1px 0 20px; color: #737b74; font-size: 12px; }
+    .remember { display: flex; align-items: center; gap: 7px; }
+    .remember input { accent-color: #315c43; }
+    a { color: #a63d22; font-weight: 600; text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    .submit { width: 100%; min-height: 47px; border: 0; border-radius: 9px; background: #ad4326; color: #fff; font: inherit; font-size: 14px; font-weight: 700; cursor: pointer; transition: background .15s ease, transform .15s ease; }
+    .submit:hover { transform: translateY(-1px); background: #91371f; }
+    .divider { display: flex; align-items: center; gap: 12px; margin: 22px 0; color: #929991; font-size: 11px; }
+    .divider::before, .divider::after { height: 1px; flex: 1; background: #e8ebe6; content: ""; }
+    .google { width: 100%; min-height: 45px; border: 1px solid #e8ded4; border-radius: 9px; background: #fff; color: #38302a; font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; }
+    .google:hover { background: #f8f9f7; }
+    .legal { margin: 22px 0 0; color: #8a928b; font-size: 11px; line-height: 1.6; text-align: center; }
+    .notice { min-height: 18px; margin: 12px 0 0; color: #a63d22; font-size: 12px; text-align: center; }
+    @media (max-width: 700px) {
+      body { min-height: 100vh; min-height: 100svh; display: flex; align-items: stretch; padding: 0; background: #fff8f1; }
+      .shell { width: 100%; max-width: 460px; min-height: 100vh; min-height: 100svh; margin: 0 auto; grid-template-columns: 1fr; grid-template-rows: 275px 1fr; border: 0; border-radius: 0; box-shadow: none; }
+      .story { min-height: 275px; padding: 25px 25px 20px; }
+      .story-copy { max-width: 62%; padding: 24px 0 0; }
+      .eyebrow { margin-bottom: 10px; font-size: 10px; }
+      h1 { font-family: inherit; font-size: clamp(27px, 8vw, 34px); font-weight: 750; letter-spacing: -.05em; line-height: 1.08; }
+      .story-copy > p:last-child, .quote { display: none; }
+      .food-illustration { right: -4px; bottom: 5px; width: 48%; max-width: 205px; }
+      .panel { align-items: flex-start; padding: 30px 26px 34px; }
+      .form-wrap { max-width: none; }
+      .mobile-brand { display: none; }
+      .form-wrap h2 { font-size: 27px; }
+      .intro { margin-bottom: 22px; }
+      .switcher { margin-bottom: 22px; }
+      .field input { height: 50px; }
+      .submit { min-height: 50px; }
+      .legal { margin-top: 18px; }
+    }
+
+    @media (max-width: 360px) {
+      .shell { grid-template-rows: 245px 1fr; }
+      .story { min-height: 245px; padding: 20px; }
+      .story-copy { max-width: 65%; padding-top: 20px; }
+      .food-illustration { width: 45%; }
+      .panel { padding: 25px 20px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <section class="story" aria-label="Introduction">
+      <div class="brand"><span class="mark" aria-hidden="true">✦</span> FOOD</div>
+      <div class="story-copy">
+        <p class="eyebrow">Good food, good mood</p>
+        <h1>Your next favorite meal is a tap away.</h1>
+        <p>Fresh local favorites, delivered warm to your door. Let the cravings lead.</p>
+      </div>
+      <svg class="food-illustration" viewBox="0 0 240 220" role="img" aria-label="Illustration of a delicious bowl of pasta">
+        <ellipse cx="120" cy="185" rx="96" ry="17" fill="#572417" opacity=".35"/>
+        <circle cx="120" cy="112" r="91" fill="#fff4dc"/>
+        <circle cx="120" cy="112" r="76" fill="#e9c47f"/>
+        <circle cx="120" cy="109" r="65" fill="#d95e2b"/>
+        <path d="M62 107c19-36 35 43 55 2s31 38 60-4M73 136c17-34 30 35 49 0s28 25 46-5M83 78c14-21 26 30 40 3s25 20 39-6" fill="none" stroke="#ffd980" stroke-linecap="round" stroke-width="8"/>
+        <circle cx="89" cy="99" r="8" fill="#48804b"/><circle cx="145" cy="125" r="9" fill="#48804b"/><circle cx="158" cy="85" r="7" fill="#48804b"/>
+        <circle cx="111" cy="83" r="5" fill="#fff1d1"/><circle cx="103" cy="142" r="5" fill="#fff1d1"/><circle cx="173" cy="111" r="5" fill="#fff1d1"/>
+        <path d="M184 21l7 14 15 2-11 10 3 15-14-8-13 8 3-15-11-10 15-2z" fill="#ffd177"/>
+      </svg>
+      <blockquote class="quote">Made with care. Delivered with a little extra joy.<strong>— Your neighborhood food crew</strong></blockquote>
+    </section>
+    <section class="panel" aria-label="Account access">
+      <div class="form-wrap">
+        <div class="brand mobile-brand"><span class="mark" aria-hidden="true">✦</span> FOOD</div>
+        <h2 id="heading">Welcome back</h2>
+        <p class="intro" id="intro">Log in to find something delicious.</p>
+        <div class="switcher" role="tablist" aria-label="Account action">
+          <button type="button" id="login-tab" role="tab" aria-selected="true">Log in</button>
+          <button type="button" id="signup-tab" role="tab" aria-selected="false">Create account</button>
+        </div>
+        <form id="auth-form">
+          <label class="field" id="name-field" hidden>
+            Your name
+            <input name="name" autocomplete="name" placeholder="Alex Morgan">
+          </label>
+          <label class="field" id="email-field" hidden>
+            Email address
+            <input name="email" type="email" autocomplete="email" placeholder="you@example.com">
+          </label>
+          <label class="field">
+            <span id="identity-label">Username</span>
+            <input name="username" type="text" autocomplete="username" placeholder="Enter your username" required>
+          </label>
+          <label class="field">
+            Password
+            <input name="password" type="password" autocomplete="current-password" placeholder="At least 8 characters" minlength="8" required>
+          </label>
+          <button class="submit" id="submit-button" type="submit">Log in</button>
+          <div class="divider" id="divider">OR CONTINUE WITH</div>
+          <button class="google" type="button" id="google-button">Continue with Google</button>
+          <p class="notice" id="notice" role="status" aria-live="polite"></p>
+        </form>
+        <p class="legal">By continuing, you agree to our <a href="#">Terms</a> and <a href="#">Privacy Policy</a>.</p>
+      </div>
+    </section>
+  </main>
+  <script type="module">
+    import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+
+    const supabase = createClient(
+      "https://hjdwffarythranelzerv.supabase.co",
+      "sb_publishable_uXCBbrE8kzbhMkCft7vXpQ_1NBAzn8K"
+    );
+    const loginTab = document.querySelector("#login-tab");
+    const signupTab = document.querySelector("#signup-tab");
+    const nameField = document.querySelector("#name-field");
+    const emailField = document.querySelector("#email-field");
+    const emailInput = document.querySelector('input[name="email"]');
+    const heading = document.querySelector("#heading");
+    const intro = document.querySelector("#intro");
+    const identityLabel = document.querySelector("#identity-label");
+    const identityInput = document.querySelector('input[name="username"]');
+    const divider = document.querySelector("#divider");
+    const googleButton = document.querySelector("#google-button");
+    const submitButton = document.querySelector("#submit-button");
+    const password = document.querySelector('input[name="password"]');
+    const notice = document.querySelector("#notice");
+    let mode = "login";
+
+    function setMode(nextMode) {
+      mode = nextMode;
+      const isSignup = mode === "signup";
+      loginTab.setAttribute("aria-selected", String(!isSignup));
+      signupTab.setAttribute("aria-selected", String(isSignup));
+      nameField.hidden = !isSignup;
+      nameField.querySelector("input").required = isSignup;
+      emailField.hidden = !isSignup;
+      emailInput.required = isSignup;
+      identityLabel.textContent = isSignup ? "Username" : "Email address";
+      identityInput.name = isSignup ? "username" : "login-email";
+      identityInput.type = isSignup ? "text" : "email";
+      identityInput.autocomplete = isSignup ? "username" : "email";
+      identityInput.placeholder = isSignup ? "Choose a username" : "you@example.com";
+      heading.textContent = isSignup ? "Create your account" : "Welcome back";
+      intro.textContent = isSignup ? "Create an account and get your cravings delivered." : "Log in to find something delicious.";
+      divider.hidden = !isSignup;
+      googleButton.hidden = !isSignup;
+      submitButton.textContent = isSignup ? "Create account" : "Log in";
+      password.autocomplete = isSignup ? "new-password" : "current-password";
+      notice.textContent = "";
+    }
+
+    loginTab.addEventListener("click", () => setMode("login"));
+    signupTab.addEventListener("click", () => setMode("signup"));
+    setMode("login");
+    document.querySelector("#auth-form").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      submitButton.disabled = true;
+      notice.textContent = "";
+      try {
+        if (mode === "signup") {
+          const { data, error } = await supabase.auth.signUp({
+            email: emailInput.value.trim(),
+            password: password.value,
+            options: {
+              data: {
+                username: identityInput.value.trim(),
+                full_name: nameField.querySelector("input").value.trim()
+              }
+            }
+          });
+          if (error) throw error;
+          const email = emailInput.value.trim();
+          setMode("login");
+          identityInput.value = email;
+          emailInput.value = "";
+          password.value = "";
+          notice.textContent = data.session
+            ? "Account successfully created. You can now log in."
+            : "Account successfully created. Check your email to confirm it, then log in.";
+          return;
+        }
+
+        const { error } = await supabase.auth.signInWithPassword({
+          email: identityInput.value.trim(),
+          password: password.value
+        });
+        if (error) {
+          if (error.code === "email_not_confirmed") {
+            notice.textContent = "Please confirm your email before logging in. Check your inbox and spam folder.";
+          } else if (error.code === "invalid_credentials") {
+            notice.textContent = "Incorrect email or password. Please try again.";
+          } else {
+            notice.textContent = error.message || "Login failed. Please try again.";
+          }
+          return;
+        }
+        notice.textContent = "Successfully logged in.";
+      } catch (error) {
+        notice.textContent = error.message || "Authentication failed. Please try again.";
+      } finally {
+        submitButton.disabled = false;
+      }
+    });
+    document.querySelector("#google-button").addEventListener("click", () => {
+      notice.textContent = "Google sign-in is not connected in this preview.";
+    });
+  </script>
+</body>
+</html>
